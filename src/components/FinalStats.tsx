@@ -60,7 +60,7 @@ const FinalStats: React.FC<FinalStatsProps> = ({
   const totalMoneySpent = moneySpentWrong + moneySpentSkips + moneySpentUni;
   const finalBalance = score;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!cpf.trim() || !password.trim()) {
@@ -72,39 +72,61 @@ const FinalStats: React.FC<FinalStatsProps> = ({
       return;
     }
 
-    // Create data object for saving
-    const playerData: PlayerData = {
-      cpf,
-      password,
-      gameStats: {
-        score,
-        correctAnswers,
-        wrongAnswers,
-        helpUsed,
-        skippedQuestions,
-        universityHelp,
-        moneyEarned,
-        moneySpent: {
-          wrongAnswers: moneySpentWrong,
-          skips: moneySpentSkips,
-          universityHelp: moneySpentUni,
-          total: totalMoneySpent
-        },
-        finalBalance
-      }
-    };
+    try {
+      // Preparar dados das estatísticas no formato esperado pelo backend
+      const estatisticas = {
+        saldo: finalBalance,
+        acertos: correctAnswers,
+        erros: wrongAnswers,
+        ajudas: helpUsed,
+        pulos: skippedQuestions,
+        universitarios: universityHelp,
+        totalGanho: moneyEarned,
+        gastoErro: moneySpentWrong,
+        gastoAjuda: 0, // Assumindo que dicas não custam dinheiro
+        gastoPulo: moneySpentSkips,
+        gastoUniversitarios: moneySpentUni
+      };
 
-    // For now, we'll just log the data since we don't have a real backend
-    console.log("Dados a serem salvos:", playerData);
-    
-    toast({
-      title: "Dados salvos com sucesso!",
-      description: "Suas estatísticas foram enviadas para nosso banco de dados.",
-      className: "bg-game-correct text-white",
-    });
-    
-    // Close the dialog after saving
-    onClose();
+      // Enviar dados para o backend
+      const response = await fetch('http://localhost:3000/salvar-estatisticas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          cpf: cpf.replace(/\D/g, ''), // Remove caracteres não numéricos do CPF
+          senha: password,
+          estatisticas: estatisticas
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.ok) {
+        toast({
+          title: "Dados salvos com sucesso!",
+          description: result.mensagem || "Suas estatísticas foram enviadas para nosso banco de dados.",
+          className: "bg-game-correct text-white",
+        });
+        
+        // Close the dialog after saving
+        onClose();
+      } else {
+        toast({
+          title: "Erro ao salvar dados",
+          description: result.mensagem || result.msg || "Erro desconhecido ao salvar estatísticas.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao enviar estatísticas:', error);
+      toast({
+        title: "Erro de conexão",
+        description: "Não foi possível conectar ao servidor. Verifique sua conexão.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
