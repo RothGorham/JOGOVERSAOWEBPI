@@ -64,13 +64,13 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
                 game: {
-                    'primary': '#6E59A5',
-                    'secondary': '#9b87f5',
-                    'accent': '#F97316',
-                    'background': '#1a1a40',
-                    'correct': '#22c55e',
-                    'wrong': '#ef4444',
-                    'yellow': '#fef7cd',
+                    'primary': '#2E7D32',    // Verde mais escuro e menos intenso
+                    'secondary': '#66BB6A',  // Verde médio mais suave
+                    'accent': '#1B5E20',     // Verde escuro mais profundo
+                    'background': '#0F2213', // Fundo verde escuro mais profundo
+                    'correct': '#43A047',    // Verde menos brilhante para respostas corretas
+                    'wrong': '#ef4444',      // Mantendo vermelho para respostas erradas
+                    'yellow': '#FFC107',     // Voltando para amarelo real para melhor contraste
                 }
 			},
 			borderRadius: {

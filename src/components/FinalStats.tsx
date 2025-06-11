@@ -120,7 +120,12 @@ const FinalStats: React.FC<FinalStatsProps> = ({
         <div className="space-y-6 p-2">
           <div className="text-center mb-4">
             <p className="text-xl">Parabéns por participar do Show do Conhecimento!</p>
-            <p>Confira seu desempenho abaixo:</p>
+            {correctAnswers + wrongAnswers >= 12 ? (
+              <p className="text-yellow-300 font-semibold">Você atingiu o limite de 12 perguntas!</p>
+            ) : (
+              <p className="text-yellow-300 font-semibold">Todas as perguntas disponíveis foram usadas!</p>
+            )}
+            <p className="mt-2">Confira seu desempenho abaixo:</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

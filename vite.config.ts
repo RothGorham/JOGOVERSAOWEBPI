@@ -8,6 +8,10 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      '/pergunta': 'http://localhost:3000',
+      '/resposta': 'http://localhost:3000'
+    }
   },
   plugins: [
     react(),

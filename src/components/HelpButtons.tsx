@@ -1,13 +1,15 @@
 
 import React from 'react';
-import { HelpCircle, SkipForward } from 'lucide-react';
+import { SkipForward, Heart } from 'lucide-react';
 
 interface HelpButtonsProps {
   onUniversityHelp: () => void;
   onSkipQuestion: () => void;
+  universityHelp?: number;
+  currentHint?: string;
 }
 
-const HelpButtons: React.FC<HelpButtonsProps> = ({ onUniversityHelp, onSkipQuestion }) => {
+const HelpButtons: React.FC<HelpButtonsProps> = ({ onUniversityHelp, onSkipQuestion, universityHelp, currentHint }) => {
   return (
     <div className="flex flex-col md:flex-row gap-4 mt-6">
       <button 
@@ -17,7 +19,7 @@ const HelpButtons: React.FC<HelpButtonsProps> = ({ onUniversityHelp, onSkipQuest
         {/* Animated effect */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
         
-        <HelpCircle size={24} className="mr-2" />
+        <Heart size={24} className="mr-2 text-red-500 fill-red-500" />
         <span>Ajuda dos Universitários</span>
         <span className="ml-2 text-xl animate-bounce">🎓</span>
       </button>

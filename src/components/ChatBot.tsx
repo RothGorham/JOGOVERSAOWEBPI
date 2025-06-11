@@ -15,14 +15,23 @@ const ChatBot: React.FC<ChatBotProps> = ({ isOpen, onClose, hint }) => {
   useEffect(() => {
     if (isOpen) {
       // Reset messages when opened
-      setMessages([
-        { text: "Olá! Sou o universitário virtual, posso te ajudar com essa pergunta!", isBot: true },
-      ]);
+      setMessages([]);
       
       // Add hint message with a delay to simulate typing
       const timer = setTimeout(() => {
-        setMessages(prev => [...prev, { text: `Minha dica é: ${hint}`, isBot: true }]);
-      }, 1500);
+        // Verificar se a dica é válida e não contém caracteres problemáticos
+        let safeHint = hint;
+        try {
+          // Tentar limpar a dica de possíveis caracteres problemáticos
+          safeHint = hint.replace(/<!DOCTYPE[^>]*>/g, '').trim();
+        } catch (e) {
+          console.error('Erro ao processar dica:', e);
+          safeHint = 'Tente analisar as alternativas com calma.';
+        }
+        
+        // Exibir a dica diretamente sem adicionar "Minha dica é:"
+        setMessages(prev => [...prev, { text: safeHint, isBot: true }]);
+      }, 500);
       
       return () => clearTimeout(timer);
     }
